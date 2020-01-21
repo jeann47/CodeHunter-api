@@ -1,3 +1,5 @@
+const {post} = require('./index')
+
 module.exports = (sequelize, DataTypes) => {
     const user = sequelize.define('user', {
         name: DataTypes.STRING,
@@ -12,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         instagram: DataTypes.STRING,
         techs: DataTypes.ARRAY(DataTypes.STRING),
         notes: DataTypes.ARRAY(DataTypes.STRING),
-        class: DataTypes.BOOLEAN,
+        type: DataTypes.BOOLEAN,
     })
-
     return user
 }

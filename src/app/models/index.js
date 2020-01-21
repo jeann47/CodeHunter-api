@@ -28,4 +28,7 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.post.belongsTo(db.user, {foreingKey: 'userId', as: 'user'})
+db.user.hasMany(db.post)
+
 module.exports = db;
