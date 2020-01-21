@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         instagram: DataTypes.STRING,
         techs: DataTypes.ARRAY(DataTypes.STRING),
         notes: DataTypes.ARRAY(DataTypes.STRING),
+        class: DataTypes.BOOLEAN,
     })
 
     return user
