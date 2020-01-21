@@ -29,7 +29,7 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false
         },
-        //Social
+		//Social
           email: {
             type: Sequelize.STRING,
             allowNull: false
