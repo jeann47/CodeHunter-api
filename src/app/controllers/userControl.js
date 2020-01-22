@@ -26,8 +26,8 @@ module.exports = {
         return res.json(data)
     },
     async update(req, res) {
+        const {id} = req.params
         const {
-            id,
             name,
             login,
             password, 
@@ -92,7 +92,7 @@ module.exports = {
         return res.json(data)
     },
     async delete(req, res) {
-        const {id} = req.body
+        const {id} = req.params
         const data = await user.destroy({where: {id}})
         return res.json(data)
     }
