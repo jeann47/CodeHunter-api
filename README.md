@@ -27,6 +27,7 @@ List the commands for [sequelize-cli](https://github.com/sequelize/cli)
 
 ## Post
  - `/users/add` -> used to add one user, hashing password and checking login
+ - `/login` -> allow the user to log-in using login or email
  
 ## Put
 - `/users/:id` -> used to update personal info about the user by his id by params and changes by body

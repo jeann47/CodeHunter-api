@@ -3,6 +3,7 @@ const {Router} = require('express')
 const userControl = require('./app/controllers/userControl')
 const postControl = require('./app/controllers/postControl')
 const SearchControl = require('./app/controllers/SearchControl')
+const loginControl = require('./app/controllers/loginControl')
 
 const routes = Router()
 
@@ -22,6 +23,8 @@ routes.delete('/posts/:id', postControl.delete) //self explanatory
 /////Search routes/////
 routes.get('/search/users', SearchControl.findUsers) //find all users by name or techs
 routes.get('/search/posts', SearchControl.findPosts) //find all posts by title, tags or type
+
+routes.post('/login', loginControl.login)
 
 
 
