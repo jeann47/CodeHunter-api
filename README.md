@@ -16,7 +16,7 @@ if the console logs you 'we are working fine' and the get request in root '/' re
 List the commands for [sequelize-cli](https://github.com/sequelize/cli)
 
 ### Routes
-**baseURL = http://localhost:3000**
+**baseURL = http://localhost:3333**
 # `Users`
 
 ## Get
