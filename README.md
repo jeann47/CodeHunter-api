@@ -53,5 +53,8 @@ List the commands for [sequelize-cli](https://github.com/sequelize/cli)
 ## Delete
 - `/posts/:id` -> used to delete a post by his id
 
+# `Ext`
 
+## Post
 
+- `/youtube` -> return (use post to secure the apiKey) the items of the [youtube api](https://developers.google.com/youtube/v3), still need to handle pagination

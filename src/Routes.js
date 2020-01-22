@@ -4,6 +4,7 @@ const userControl = require('./app/controllers/userControl')
 const postControl = require('./app/controllers/postControl')
 const SearchControl = require('./app/controllers/SearchControl')
 const loginControl = require('./app/controllers/loginControl')
+const youtubeControl = require('./app/controllers/youtubeApiControl')
 
 const routes = Router()
 
@@ -24,7 +25,9 @@ routes.delete('/posts/:id', postControl.delete) //self explanatory
 routes.get('/search/users', SearchControl.findUsers) //find all users by name or techs
 routes.get('/search/posts', SearchControl.findPosts) //find all posts by title, tags or type
 
-routes.post('/login', loginControl.login)
+routes.post('/login', loginControl.login) //can use email or login
+
+routes.post('/youtube', youtubeControl.list) //return the items of the youtube api, still need to handle pagination
 
 
 
