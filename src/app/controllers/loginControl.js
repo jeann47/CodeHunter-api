@@ -1,5 +1,5 @@
 const {user} = require('../models')
-const {generateToken, generateAdminToken} = require('../utils/methods')
+const {generateToken, generateAdminToken} = require('../utils')
 const bcrypt = require('bcrypt')
 const Sequelize = require('sequelize')
 

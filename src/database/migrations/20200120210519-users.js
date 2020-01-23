@@ -27,7 +27,7 @@ module.exports = {
         },
         bio: {
           type: Sequelize.STRING,
-          allowNull: false
+          allowNull: true
         },
 		//Social
           email: {
@@ -53,7 +53,7 @@ module.exports = {
         //End Social
         techs: {
           type: Sequelize.ARRAY(Sequelize.STRING),
-          allowNull: false
+          allowNull: true
         },
         notes: {
           type: Sequelize.ARRAY(Sequelize.STRING),

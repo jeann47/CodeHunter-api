@@ -1,28 +1,56 @@
 const {user, post} = require('../models')
 const bcrypt = require('bcrypt')
+const {auth, adminAuth} = require('./utils')
+
+let attributes = [
+    'name',
+    'pic',
+    'bio',
+    'gitHub',
+    'stackOverflow',
+    'linkedIn',
+    'instagram',
+    'techs',
+]
 
 module.exports = {
     async index(req, res) {
         const {id} = req.params
+        const acc = await auth(req.headers)
+        const adm = await adminAuth(req.headers)
+
+        if(id == acc)
+        {
+            attributes.push('email', 'login', 'notes')
+        }
+        if(id == adm)
+        {
+            attributes.push('createdAt', 'updatedAt', 'type')
+        }
+
         const data = await user.findByPk(id, {
+            attributes,
             include: post
         })
         return res.json(data)
     },
     async store(req, res) {
-        let {name, login, password, bio, email, techs, type} = req.body
-        const User = await user.findOne({where: {login}})
+        let {name, login, password, email, type} = req.body
+        const User = await user.findOne({where: {email}})
         if(!User) 
         {
             await bcrypt.hash(password, 10, async (err, password) => {{
-                const data = await user.create({name, login, password, bio, email, techs, type})
+                const data = await user.create({name, login, password, email, type})
                 return res.json(data)
             }})
         }
-        else return res.send("This login is already taken")
+        else return res.send("There is another account using this email.")
     },
     async list(req, res) {
-        const data = await user.findAll({include:post})
+        const data = await user.findAll({
+            attributes,
+            include:post
+        })
         return res.json(data)
     },
     async update(req, res) {
@@ -68,9 +96,18 @@ module.exports = {
                 }
             })
         }
-        if(name || pic || bio || techs || email) //user info
+        if(email) //user info
         {
-            data = await user.update({name, pic, email}, {where: {id}})
+            const User = await user.findOne({where: {email}})
+            if(!User)
+            {
+                data = await user.update({email}, {where: {id}})
+            }
+            else res.status(350)
+        }
+        if(name || pic || bio || techs) //user info
+        {
+            data = await user.update({name, pic, bio, techs}, {where: {id}})
         }
         if(github, stackOverflow, linkedIn, instagram) //social info
         {
@@ -93,6 +130,11 @@ module.exports = {
     },
     async delete(req, res) {
         const {id} = req.params
+        const acc = await auth(req.headers)
+        if(id != acc)
+        {
+            return res.status(350).send('That is not your account to delete')
+        }
         const data = await user.destroy({where: {id}})
         return res.json(data)
     }

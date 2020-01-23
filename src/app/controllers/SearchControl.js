@@ -1,6 +1,17 @@
 const {user, post} = require('../models')
 const Sequelize = require('sequelize')
 
+let attributes = [
+    'name',
+    'pic',
+    'bio',
+    'gitHub',
+    'stackOverflow',
+    'linkedIn',
+    'instagram',
+    'techs',
+]
+
 module.exports = {
     async findUsers(req, res) {
         const {
@@ -11,6 +22,7 @@ module.exports = {
         if(name)
         {
             data = await user.findAll({
+                attributes,
                 where: {
                     name: {
                         [Sequelize.Op.substring]: name
@@ -22,6 +34,7 @@ module.exports = {
         if(techs)
         {
             data = await user.findAll({
+                attributes,
                 where: {
                     techs: {
                         [Sequelize.Op.contains]: techs
@@ -47,7 +60,7 @@ module.exports = {
                         [Sequelize.Op.substring]: title
                     }
                 },
-                include: [{model: user, as: 'user'}]
+                include: [{model: user, attributes, as: 'user'}]
             })
         }
         if(tags)
@@ -58,14 +71,14 @@ module.exports = {
                         [Sequelize.Op.contains]: tags
                     }
                 },
-                include: [{model: user, as: 'user'}]
+                include: [{model: user, attributes, as: 'user'}]
             })
         }
         if(type)
         {
             data = await post.findAll({
                 where: {type},
-                include: [{model: user, as: 'user'}]
+                include: [{model: user, attributes, as: 'user'}]
             })
         }
         return res.json(data)

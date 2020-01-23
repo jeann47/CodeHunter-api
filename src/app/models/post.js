@@ -1,5 +1,3 @@
-const {user} = require('./index')
-
 module.exports = (sequelize, DataTypes) => {
     const post = sequelize.define('post', {
         userId: DataTypes.INTEGER,

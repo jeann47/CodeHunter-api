@@ -1,9 +1,21 @@
 const {user, post} = require('../models')
+const {auth, adminAuth} = require('./utils')
+
+let attributes = [
+    'name',
+    'pic',
+    'bio',
+    'gitHub',
+    'stackOverflow',
+    'linkedIn',
+    'instagram',
+    'techs',
+]
 
 module.exports = {
     async index(req, res) {
         const {id} = req.params
-        const Post = await post.findByPk(id, {include: [{model: user, as: 'user'}]})
+        const Post = await post.findByPk(id, {include: [{model: user, attributes, as: 'user'}]})
         return res.json(Post)
     },
     async store(req, res) {
@@ -12,7 +24,7 @@ module.exports = {
         return res.json(data)
     },
     async list(req, res) {
-        const Post = await post.findAll({include: [{model: user, as: 'user'}]})
+        const Post = await post.findAll({include: [{model: user, attributes, as: 'user'}]})
         return res.json(Post)
     },
     async update(req, res) {
