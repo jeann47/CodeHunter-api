@@ -58,6 +58,7 @@ module.exports = {
     return res.json(Post);
   },
 
+  // TODO: maybe it's better to get the user, build object and update just once.
   async update(req, res) {
     const { id } = req.params;
     const {

@@ -34,28 +34,26 @@ module.exports = {
     return res.json(data);
   },
 
-  // eslint-disable-next-line consistent-return
   async store(req, res) {
-    let { name, login, password, email, type } = req.body;
-    if(!type) type = false // !admin
+    const { name, login, password, email, type } = req.body;
     const User = await user.findOne({ where: { email } });
 
-    if (!User) {
-      // eslint-disable-next-line no-shadow
-      await bcrypt.hash(password, 10, async (err, password) => {
-        // eslint-disable-next-line no-lone-blocks
-        {
-          const data = await user.create({
-            name,
-            login,
-            password,
-            email,
-            type
-          });
-          return res.json(data);
-        }
+    if (User) {
+      return res.send("There is another account using this email.");
+    }
+
+    // eslint-disable-next-line no-shadow
+    return bcrypt.hash(password, 10, async (err, password) => {
+      const data = await user.create({
+        name,
+        login,
+        password,
+        email,
+        type: type || false
       });
-    } else return res.send("There is another account using this email.");
+
+      return res.json(data);
+    });
   },
 
   async list(req, res) {
@@ -63,6 +61,7 @@ module.exports = {
       attributes,
       include: post
     });
+
     return res.json(data);
   },
 
@@ -82,7 +81,9 @@ module.exports = {
       instagram,
       notes
     } = req.body;
+
     let data = null;
+
     if (login) {
       const User = await user.findOne({ where: { login } });
       if (!User) {
@@ -97,10 +98,7 @@ module.exports = {
         } else {
           // eslint-disable-next-line no-shadow
           await bcrypt.hash(password, 10, async (err, password) => {
-            // eslint-disable-next-line no-lone-blocks
-            {
-              data = await user.update({ password }, { where: { id } });
-            }
+            data = await user.update({ password }, { where: { id } });
           });
         }
       });
@@ -132,16 +130,21 @@ module.exports = {
         data = await user.update({ notes: User.notes }, { where: { id } });
       }
     }
+
     return res.json(data);
   },
 
   async delete(req, res) {
     const { id } = req.params;
     const acc = await auth(req.headers);
+
+    // eslint-disable-next-line eqeqeq
     if (id != acc) {
       return res.status(350).send("That is not your account to delete");
     }
+
     const data = await user.destroy({ where: { id } });
+
     return res.json(data);
   }
 };

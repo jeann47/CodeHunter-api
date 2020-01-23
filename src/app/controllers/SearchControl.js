@@ -19,7 +19,9 @@ module.exports = {
       name,
       techs // array
     } = req.body;
+
     let data = null;
+
     if (name) {
       data = await user.findAll({
         attributes,
@@ -42,11 +44,15 @@ module.exports = {
         include: post
       });
     }
+
     return res.json(data);
   },
+
   async findPosts(req, res) {
     const { title, tags, type } = req.body;
+
     let data = null;
+
     if (title) {
       data = await post.findAll({
         where: {
@@ -73,6 +79,7 @@ module.exports = {
         include: [{ model: user, attributes, as: "user" }]
       });
     }
+
     return res.json(data);
   }
 };
