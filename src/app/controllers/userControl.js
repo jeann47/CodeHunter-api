@@ -36,7 +36,8 @@ module.exports = {
 
   // eslint-disable-next-line consistent-return
   async store(req, res) {
-    const { name, login, password, email, type } = req.body;
+    let { name, login, password, email, type } = req.body;
+    if(!type) type = false // !admin
     const User = await user.findOne({ where: { email } });
 
     if (!User) {
@@ -137,7 +138,7 @@ module.exports = {
   async delete(req, res) {
     const { id } = req.params;
     const acc = await auth(req.headers);
-    if (id !== acc) {
+    if (id != acc) {
       return res.status(350).send("That is not your account to delete");
     }
     const data = await user.destroy({ where: { id } });
