@@ -24,15 +24,15 @@ First thing you need to do is make sure that you have installed
 - [Yarn](yarnpkg.com/) or [npm](https://www.npmjs.com/) 
 
 Then you can clone the repository into your computer using
-</p>
+
 ```git clone https://github.com/jeann47/CodeHunter-api```
 
 You can also download as zip package over the interface
-</p>
+
 Now, in the project folder, run:
-</p>
+
 ```yarn init``` or ```npm install``` to download the dependencies.
-</p>
+
 Then you are ready to go
 
 ## Available Scripts
