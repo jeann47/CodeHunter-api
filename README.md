@@ -17,6 +17,7 @@ List the commands for [sequelize-cli](https://github.com/sequelize/cli)
 
 ### Routes
 **baseURL = http://localhost:3333**
+*all routes that contains sensitive data are filtered by authentication*
 # `Users`
 
 ## Get
