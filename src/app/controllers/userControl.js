@@ -82,56 +82,65 @@ module.exports = {
       notes
     } = req.body;
 
-    let data = null;
+    let userData = {
+      name,
+      pic,
+      bio,
+      techs,
+      github,
+      stackOverflow,
+      linkedIn,
+      instagram
+    }; // the front end will let them autocompleted, those way the user doesnt need to write all again to change a single part
 
     if (login) {
       const User = await user.findOne({ where: { login } });
-      if (!User) {
-        data = await user.update({ login }, { where: { id } });
-      } else res.status(350);
+      if (User) {
+        return res.status(401).send("This user is already taken");
+      } else {
+        userData = { ...userData, login };
+      }
     }
     if (password) {
       const User = await user.findByPk(id);
       await bcrypt.compare(password, User.password).then(async check => {
         if (check) {
-          res.status(350);
+          return res.status(401).send("Inform a different password");
         } else {
           // eslint-disable-next-line no-shadow
           await bcrypt.hash(password, 10, async (err, password) => {
-            data = await user.update({ password }, { where: { id } });
+            userData = { ...userData, password };
           });
         }
       });
     }
+
     if (email) {
       // user info
       const User = await user.findOne({ where: { email } });
-      if (!User) {
-        data = await user.update({ email }, { where: { id } });
-      } else res.status(350);
-    }
-    if (name || pic || bio || techs) {
-      // user info
-      data = await user.update({ name, pic, bio, techs }, { where: { id } });
-    }
-    if ((github, stackOverflow, linkedIn, instagram)) {
-      // social info
-      data = await user.update(
-        { github, stackOverflow, linkedIn, instagram },
-        { where: { id } }
-      );
-    }
-    if (notes) {
-      const User = await user.findByPk(id);
-      if (!User.notes) {
-        data = await user.update({ notes: [notes] }, { where: { id } });
+      if (User) {
+        return res
+          .status(401)
+          .send("There is another account using this email");
       } else {
-        User.notes.push(notes);
-        data = await user.update({ notes: User.notes }, { where: { id } });
+        userData = { ...userData, email };
       }
     }
 
-    return res.json(data);
+    if (notes) {
+      const User = await user.findByPk(id);
+      if (!User.notes) {
+        userData = { ...userData, notes: [notes] };
+      } else {
+        User.notes.push(notes);
+        userData = { ...userData, notes };
+      }
+    }
+
+    const data = user.update({ ...userData }, { where: { id } });
+    return data
+      ? res.status(200).send("Updated!")
+      : res.status(401).send("Failed!");
   },
 
   async delete(req, res) {
@@ -140,7 +149,7 @@ module.exports = {
 
     // eslint-disable-next-line eqeqeq
     if (id != acc) {
-      return res.status(350).send("That is not your account to delete");
+      return res.status(401).send("That is not your account to delete");
     }
 
     const data = await user.destroy({ where: { id } });

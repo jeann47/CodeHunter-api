@@ -61,56 +61,8 @@ module.exports = {
   // TODO: maybe it's better to get the user, build object and update just once.
   async update(req, res) {
     const { id } = req.params;
-    const {
-      title,
-      mainImg,
-      images, // objet {image: {index, link}}
-      texts, // objet {text: {index, content}}
-      videoLink,
-      tags,
-      type
-    } = req.body;
-
-    let data = null;
-
-    // #region Post Info
-    if (title) {
-      data = await post.update({ title }, { where: { id } });
-    }
-    if (tags) {
-      data = await post.update({ tags }, { where: { id } });
-    }
-    if (type) {
-      data = await post.update({ type }, { where: { id } });
-    }
-    // #endregion
-
-    // #region Post Body
-    if (videoLink) {
-      data = await post.update({ videoLink }, { where: { id } });
-    }
-    if (mainImg) {
-      data = await post.update({ mainImg }, { where: { id } });
-    }
-    if (images) {
-      const Post = await post.findByPk(id);
-      Object.entries(images).map(i => {
-        const { index, link } = i[1];
-        Post.images[index] = link;
-      });
-      data = await post.update({ images: Post.images }, { where: { id } });
-    }
-    if (texts) {
-      const Post = await post.findByPk(id);
-      Object.entries(texts).map(t => {
-        const { index, content } = t[1];
-        Post.texts[index] = content;
-      });
-      data = await post.update({ texts: Post.content }, { where: { id } });
-    }
-    // #endregion
-
-    return res.send(data);
+    const data = post.update({ ...req.body }, { where: { id } });
+    return res.json(data);
   },
 
   async delete(req, res) {
